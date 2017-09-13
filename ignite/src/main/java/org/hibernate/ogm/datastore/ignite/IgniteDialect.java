@@ -186,6 +186,7 @@ public class IgniteDialect extends BaseGridDialect implements GridDialect, Query
 			builder = provider.createBinaryObjectBuilder( entityCache.get( keyObject ) );
 		}
 		else {
+			keyObject = provider.createKeyObject( key );
 			builder = provider.createBinaryObjectBuilder( provider.getEntityTypeName( key.getMetadata().getTable() ) );
 		}
 
