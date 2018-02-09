@@ -1,9 +1,9 @@
 <!--
- ~ Hibernate OGM, Domain model persistence for NoSQL datastores
- ~
- ~ License: GNU Lesser General Public License (LGPL), version 2.1 or later
- ~ See the lgpl.txt file in the root directory or <http://www.gnu.org/licenses/lgpl-2.1.html>.
-  -->
+~ Hibernate OGM, Domain model persistence for NoSQL datastores
+~
+~ License: GNU Lesser General Public License (LGPL), version 2.1 or later
+~ See the lgpl.txt file in the root directory or <http://www.gnu.org/licenses/lgpl-2.1.html>.
+-->
 <assembly>
     <id>${hibernateWildflyClassifier}</id>
     <formats>
@@ -26,12 +26,13 @@
             <useProjectArtifact>false</useProjectArtifact>
             <outputDirectory>org/hibernate/ogm/ignite/${hibernate.ogm.ignite.module.slot}</outputDirectory>
             <useTransitiveFiltering>false</useTransitiveFiltering>
-            <unpack>false</unpack>
+            <unpack>false</unpack>            
             <includes>
                 <include>org.hibernate.ogm:hibernate-ogm-ignite</include>
-                <include>org.apache.ignite:ignite-core</include>
-                <include>org.apache.ignite:ignite-indexing</include>
-                <include>org.apache.ignite:ignite-jta</include>
+                <include>org.apache.ignite:*</include>
+                <include>javax.cache:cache-api</include>
+                <include>org.gridgain:ignite-shmem</include>
+                <include>commons-codec:commons-codec</include>
             </includes>
         </dependencySet>
 
