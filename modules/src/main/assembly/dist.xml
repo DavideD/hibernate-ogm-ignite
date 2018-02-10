@@ -38,7 +38,6 @@
                 <include>javax.cache:cache-api</include>
                 <include>org.gridgain:ignite-shmem</include>
                 <include>commons-codec:commons-codec</include>
-                <include>org.springframework:*</include>
             </includes>
         </dependencySet>
 
