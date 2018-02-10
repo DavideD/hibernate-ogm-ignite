@@ -19,6 +19,11 @@
             <outputDirectory>/org/hibernate/ogm/ignite/${hibernate.ogm.ignite.module.slot}</outputDirectory>
             <filtered>true</filtered>
         </file>
+        <file>
+             <source>${module.xml.aliases.basedir}/ogm/ignite/module.xml</source>
+             <outputDirectory>/org/hibernate/ogm/ignite/main</outputDirectory>
+             <filtered>true</filtered>
+        </file>
     </files>
 
     <dependencySets>
@@ -33,6 +38,7 @@
                 <include>javax.cache:cache-api</include>
                 <include>org.gridgain:ignite-shmem</include>
                 <include>commons-codec:commons-codec</include>
+                <include>org.springframework:*</include>
             </includes>
         </dependencySet>
 
