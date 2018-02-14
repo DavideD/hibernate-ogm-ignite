@@ -6,16 +6,13 @@
  */
 package org.hibernate.ogm.datastore.ignite.configuration.impl;
 
-import static org.hibernate.ogm.datastore.ignite.util.StringHelper.isNotEmpty;
-
 import java.net.URL;
 import java.util.Map;
 
+import org.hibernate.boot.registry.classloading.spi.ClassLoaderService;
 import org.hibernate.ogm.datastore.ignite.IgniteConfigurationBuilder;
 import org.hibernate.ogm.datastore.ignite.IgniteProperties;
 import org.hibernate.ogm.datastore.ignite.impl.IgniteDatastoreProvider;
-import org.hibernate.ogm.datastore.ignite.logging.impl.Log;
-import org.hibernate.ogm.datastore.ignite.logging.impl.LoggerFactory;
 import org.hibernate.ogm.util.configurationreader.spi.ConfigurationPropertyReader;
 
 /**
@@ -24,8 +21,6 @@ import org.hibernate.ogm.util.configurationreader.spi.ConfigurationPropertyReade
  * @author Victor Kadachigov
  */
 public class IgniteProviderConfiguration {
-
-	private static final Log log = LoggerFactory.getLogger();
 
 	/**
 	 * Name of the default Ignite configuration file
@@ -41,18 +36,26 @@ public class IgniteProviderConfiguration {
 	 *
 	 * @param configurationMap The values to use as configuration
 	 */
-	public void initialize(Map configurationMap) {
-		this.url = new ConfigurationPropertyReader( configurationMap )
+	public void initialize(Map configurationMap, ClassLoaderService classLoaderService) {
+		ConfigurationPropertyReader configurationPropertyReader = new ConfigurationPropertyReader( configurationMap, classLoaderService );
+
+		this.url = configurationPropertyReader
 			.property( IgniteProperties.CONFIGURATION_RESOURCE_NAME, URL.class )
 			.withDefault( IgniteProviderConfiguration.class.getClassLoader().getResource( DEFAULT_CONFIG ) )
 			.getValue();
 
-		this.configBuilder = new ConfigurationPropertyReader( configurationMap )
-				.property( IgniteProperties.CONFIGURATION_CLASS_NAME, IgniteConfigurationBuilder.class )
-				.instantiate()
+		String configBuilderClassName = configurationPropertyReader
+				.property( IgniteProperties.CONFIGURATION_CLASS_NAME, String.class )
 				.getValue();
 
-		this.instanceName = new ConfigurationPropertyReader( configurationMap )
+		if ( configBuilderClassName != null ) {
+			this.configBuilder = configurationPropertyReader
+					.property( IgniteProperties.CONFIGURATION_CLASS_NAME, IgniteConfigurationBuilder.class )
+					.instantiate()
+					.getValue();
+		}
+
+		this.instanceName = configurationPropertyReader
 				.property( IgniteProperties.IGNITE_INSTANCE_NAME, String.class )
 				.getValue();
 	}
