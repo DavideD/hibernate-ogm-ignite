@@ -34,7 +34,7 @@ public class IgniteProviderConfiguration {
 
 	private URL url;
 	private String instanceName;
-	private Class<IgniteConfigurationBuilder> configBuilderClass;
+	private IgniteConfigurationBuilder configBuilder;
 
 	/**
 	 * Initialize the internal values from the given {@link Map}.
@@ -47,17 +47,10 @@ public class IgniteProviderConfiguration {
 			.withDefault( IgniteProviderConfiguration.class.getClassLoader().getResource( DEFAULT_CONFIG ) )
 			.getValue();
 
-		String className = new ConfigurationPropertyReader( configurationMap )
-				.property( IgniteProperties.CONFIGURATION_CLASS_NAME, String.class )
+		this.configBuilder = new ConfigurationPropertyReader( configurationMap )
+				.property( IgniteProperties.CONFIGURATION_CLASS_NAME, IgniteConfigurationBuilder.class )
+				.instantiate()
 				.getValue();
-		if ( isNotEmpty( className ) ) {
-			try {
-				this.configBuilderClass = (Class<IgniteConfigurationBuilder>) Class.forName( className );
-			}
-			catch (ClassNotFoundException ex) {
-				throw log.invalidPropertyValue( IgniteProperties.CONFIGURATION_CLASS_NAME, ex.getMessage(), ex );
-			}
-		}
 
 		this.instanceName = new ConfigurationPropertyReader( configurationMap )
 				.property( IgniteProperties.IGNITE_INSTANCE_NAME, String.class )
@@ -80,8 +73,8 @@ public class IgniteProviderConfiguration {
 		return instanceName;
 	}
 
-	public Class<IgniteConfigurationBuilder> getConfigBuilderClass() {
-		return configBuilderClass;
+	public IgniteConfigurationBuilder getConfigBuilder() {
+		return configBuilder;
 	}
 
 }
